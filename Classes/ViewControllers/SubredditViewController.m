@@ -11,6 +11,7 @@
 #import "StoryViewController.h"
 #import "iRedditAppDelegate.h"
 #import "Constants.h"
+#import "StoryCell.h"
 
 @implementation SubredditViewController
 
@@ -99,7 +100,9 @@
 	if (tabBar)
 		[self.view addSubview:tabBar];
 
-    [self.view addSubview:self.tableView]; 
+    [self.view addSubview:self.tableView];
+	UISwipeGestureRecognizer *recognizer = [[[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(performSwipe:)] autorelease];
+	[self.tableView addGestureRecognizer:recognizer];
 }
 
 /*- (void)unloadView
@@ -109,6 +112,14 @@
 	
 	[super unloadView];
 }*/
+
+- (void)performSwipe:(UISwipeGestureRecognizer*)sender {
+	NSIndexPath *path = [self.tableView indexPathForRowAtPoint:[sender locationInView:self.tableView]];
+	UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:path];
+	if ([cell isKindOfClass:[StoryCell class]]) {
+		[(StoryCell *)cell showBackView];
+	}
+}
 
 - (void)restoreSavedState
 {

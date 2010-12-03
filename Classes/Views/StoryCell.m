@@ -11,7 +11,7 @@
 
 @implementation StoryCell
 
-@synthesize storyTitleView, storyDescriptionView, storyImage;
+@synthesize storyTitleView, storyDescriptionView, storyImage, backView;
 @dynamic story;
 
 + (float)tableView:(UITableView *)aTableView rowHeightForItem:(Story *)aStory
@@ -91,6 +91,9 @@
 																					 next:[TTContentStyle styleWithNext:nil]]];
 
 		[[self contentView] addSubview:storyImage];
+
+		backView = [[UILabel alloc] initWithFrame:CGRectZero];
+		[[self contentView] addSubview:backView];
     }
 	
     return self;
@@ -210,6 +213,18 @@
 	
 	[secondaryDescriptionView setText:[NSString stringWithFormat:@"%d points in %@ by %@", story.score, story.subreddit, story.author, story.totalComments, story.totalComments == 1  ? @"" : @"s"]];
 	[secondaryDescriptionView setNeedsDisplay];
+}
+
+- (void)showBackView {
+	if (backView.hidden) {
+		backView.hidden = NO;
+	}
+	NSLog(@"Showing back view for %@", story.title);
+}
+- (void)hideBackView {
+	if (!backView.hidden) {
+		backView.hidden = YES;
+	}
 }
 
 @end

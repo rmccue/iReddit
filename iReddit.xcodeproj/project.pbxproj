@@ -105,6 +105,7 @@
 		ADFB556C0FEACC5C0067CEC1 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = ADFB556B0FEACC5C0067CEC1 /* Default.png */; };
 		ADFB556E0FEACC7A0067CEC1 /* NSDictionary+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = ADFB556D0FEACC7A0067CEC1 /* NSDictionary+JSON.m */; };
 		D087533112A8EC1F0031227C /* comments.css in Resources */ = {isa = PBXBuildFile; fileRef = D087533012A8EC1F0031227C /* comments.css */; };
+		D087544412A925400031227C /* comments.js in Resources */ = {isa = PBXBuildFile; fileRef = D087534112A8ED2F0031227C /* comments.js */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -266,6 +267,7 @@
 		ADFB556B0FEACC5C0067CEC1 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = SOURCE_ROOT; };
 		ADFB556D0FEACC7A0067CEC1 /* NSDictionary+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDictionary+JSON.m"; path = "Classes/Extensions/NSDictionary+JSON.m"; sourceTree = SOURCE_ROOT; };
 		D087533012A8EC1F0031227C /* comments.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = comments.css; sourceTree = "<group>"; };
+		D087534112A8ED2F0031227C /* comments.js */ = {isa = PBXFileReference; explicitFileType = sourcecode.javascript; fileEncoding = 4; path = comments.js; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -417,6 +419,7 @@
 				ADFB53F90FEAC5E70067CEC1 /* Three20.bundle */,
 				ADFB53EB0FEAC5920067CEC1 /* Three20.xcodeproj */,
 				D087533012A8EC1F0031227C /* comments.css */,
+				D087534112A8ED2F0031227C /* comments.js */,
 				ADFB533F0FEAC3EA0067CEC1 /* comments.html */,
 				ADFB53400FEAC3EA0067CEC1 /* Constants.h */,
 				ADFB53410FEAC3EA0067CEC1 /* Constants.m */,
@@ -638,6 +641,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D087544412A925400031227C /* comments.js in Resources */,
 				28AD73600D9D9599002E5188 /* MainWindow.xib in Resources */,
 				ADFB537C0FEAC3EA0067CEC1 /* comments.html in Resources */,
 				ADFB53AE0FEAC4010067CEC1 /* back.png in Resources */,

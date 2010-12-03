@@ -571,10 +571,11 @@ p {
 				{
 					if (this.active)
 					{
+						if (window.SELECTED && window.SELECTED == $(data.id))
+							window.SELECTED.unselect();
+						
 						$(data.id+'_children').className = "comment-children hidden";
 						$(data.id+'_comment').className = "comment-body hidden";
-						$(data.id+"_reply").className = "comment-reply";
-						$(data.id+"_reply_padding").className = "comment-reply-padding";
 						toggleControl.innerText = "[+] ";
 					}
 					else
@@ -843,7 +844,6 @@ p {
 				
 				element.select = function()
 				{
-					alert(window.SELECTED);
 					if (window.SELECTED && window.SELECTED == this)
 						return;
 						

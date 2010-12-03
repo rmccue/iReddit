@@ -104,6 +104,7 @@
 		ADFB54A80FEAC8A60067CEC1 /* Three20Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = ADFB54A70FEAC8A60067CEC1 /* Three20Extensions.m */; };
 		ADFB556C0FEACC5C0067CEC1 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = ADFB556B0FEACC5C0067CEC1 /* Default.png */; };
 		ADFB556E0FEACC7A0067CEC1 /* NSDictionary+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = ADFB556D0FEACC7A0067CEC1 /* NSDictionary+JSON.m */; };
+		D087533112A8EC1F0031227C /* comments.css in Resources */ = {isa = PBXBuildFile; fileRef = D087533012A8EC1F0031227C /* comments.css */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -264,6 +265,7 @@
 		ADFB54A70FEAC8A60067CEC1 /* Three20Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Three20Extensions.m; sourceTree = "<group>"; };
 		ADFB556B0FEACC5C0067CEC1 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = SOURCE_ROOT; };
 		ADFB556D0FEACC7A0067CEC1 /* NSDictionary+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDictionary+JSON.m"; path = "Classes/Extensions/NSDictionary+JSON.m"; sourceTree = SOURCE_ROOT; };
+		D087533012A8EC1F0031227C /* comments.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = comments.css; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -414,6 +416,7 @@
 				3821EF3311CAC98F002CCCE2 /* TouchJSON */,
 				ADFB53F90FEAC5E70067CEC1 /* Three20.bundle */,
 				ADFB53EB0FEAC5920067CEC1 /* Three20.xcodeproj */,
+				D087533012A8EC1F0031227C /* comments.css */,
 				ADFB533F0FEAC3EA0067CEC1 /* comments.html */,
 				ADFB53400FEAC3EA0067CEC1 /* Constants.h */,
 				ADFB53410FEAC3EA0067CEC1 /* Constants.m */,
@@ -686,6 +689,7 @@
 				61C35F1011FF29DB001A2F85 /* voteDown@2x.png in Resources */,
 				61C35F1111FF29DB001A2F85 /* voteUp@2x.png in Resources */,
 				61DE6FA211FF399700B1F810 /* Default@2x.png in Resources */,
+				D087533112A8EC1F0031227C /* comments.css in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

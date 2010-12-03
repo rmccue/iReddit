@@ -191,6 +191,9 @@ body
 		-webkit-touch-callout: none;
 	}
 
+		.comment-body.negative { color: gray; }
+		.comment-body.selected { background: rgba(255, 255, 155, 0.5); }
+
 	.comment-reply {
 		display: none;
 		
@@ -206,6 +209,16 @@ body
 			height: 90px;
 			display: none;
 		}
+
+		.comment-reply.visible, .comment-reply-padding.visible {
+			display: block;
+		}
+
+		.comment-reply-textarea {
+			width: 100%;
+			height: 45px;
+		}
+
 		.comment-reply button, #REPLY_submit {
 			-webkit-border-radius: 6px;
 			background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#757575), to(#4B4B4B));
@@ -233,7 +246,21 @@ body
 			color: #ff4500;
 		}
 
-	.coment-status {
+	.comment-status {
+		display: none;
+	}
+
+		.comment-status.visible { display: block; }
+
+	.comment-voting-controls {
+		float: left;
+	}
+
+	.comment-controls {
+		float: right;
+	}
+
+	.comment-children.hidden, .comment-body.hidden {
 		display: none;
 	}
 
@@ -241,6 +268,10 @@ body
 	padding: 6px;
 	display: none;
 }
+
+	#REPLY.visible, #REPLY_status.visible {
+		display: block;
+	}
 
 	#reply-textarea {
 		width: 100%;
@@ -385,7 +416,7 @@ p {
 	{
 		if (xhr.readyState == 4)
 		{
-			$("REPLY").style.display = "block";
+			$("REPLY").className = "visible";
 			$("COMMENTS").innerHTML = "";
 			$("META").innerHTML = "Tap a comment to vote or reply.";
 			
@@ -449,7 +480,7 @@ p {
 							$("COMMENTS").insertBefore(theComment, $("COMMENTS").childNodes[0]);
 							
 							$("reply-textarea").value = "";
-							$("REPLY_status").style.display = "none";
+							$("REPLY_status").className = "";
 						}
 						else
 						{
@@ -465,7 +496,7 @@ p {
 								
 				$("REPLY_submit").disabled = true;
 				$("REPLY_status").innerText = "Submitting...";
-				$("REPLY_status").style.display = "block";
+				$("REPLY_status").className = "visible";
 				
 				anEvent.stopPropagation();
 			}
@@ -540,14 +571,16 @@ p {
 				{
 					if (this.active)
 					{
-						$(data.id+'_children').style.display = "none";
-						$(data.id+'_comment').style.display = "none";
+						$(data.id+'_children').className = "comment-children hidden";
+						$(data.id+'_comment').className = "comment-body hidden";
+						$(data.id+"_reply").className = "comment-reply";
+						$(data.id+"_reply_padding").className = "comment-reply-padding";
 						toggleControl.innerText = "[+] ";
 					}
 					else
 					{
-						$(data.id+'_children').style.display = "block";
-						$(data.id+'_comment').style.display = "block";
+						$(data.id+'_children').className = "comment-children";
+						$(data.id+'_comment').className = "comment-body";
 						toggleControl.innerText = "[-] ";
 					}
 
@@ -565,7 +598,7 @@ p {
 				//replaceHTMLCharactersInElement(commentBody);
 				
 				if (data.ups - data.downs < 0)
-					commentBody.style.color = "gray";
+					commentBody.className = "comment-body negative";
 
 				element.appendChild(commentBody);
 				
@@ -594,20 +627,17 @@ p {
 				
 				commentTextArea.className = "comment-reply-textarea";
 				commentTextArea.id = data.id+"_textarea";
-				commentTextArea.style.width = "100%";
-				commentTextArea.style.height = "45px";
 				
 				commentReply.appendChild(commentTextArea);
 				
 				var commentControls = document.createElement("div");
+				commentControls.className = "comment-controls";
 				commentReply.appendChild(commentControls);
-				
-				commentControls.style.cssFloat = "right";
-				//commentControls.style.width = "120px";
 				
 				var commentCancelButton = document.createElement("button");
 				
 				commentCancelButton.type = "button";
+				commentCancelButton.className = "comment-cancel-button";
 				commentCancelButton.innerHTML = "cancel";
 				//commentCancelButton.style.clear = "left";
 				
@@ -673,12 +703,13 @@ p {
 								$(element.id+"_children").insertBefore(theComment, $(element.id+"_children").firstChild);
 								
 								commentTextArea.value = "";
-								commentStatus.style.display = "none";
+								commentStatus.className = "comment-status";
 								element.unselect();
 							}
 							else
 							{
 								commentStatus.innerText = "Post failed. Try again in a few minutes.";
+								commentStatus.className = "comment-status failed";
 							}						
 
 							commentSubmitButton.disabled = false;
@@ -690,7 +721,7 @@ p {
 									
 					commentSubmitButton.disabled = true;
 					commentStatus.innerText = "Submitting...";
-					commentStatus.style.display = "block";
+					commentStatus.className = "comment-status visible";
 					
 					anEvent.stopPropagation();
 				}
@@ -698,9 +729,8 @@ p {
 				commentControls.appendChild(commentSubmitButton);
 
 				var commentVotingControls = document.createElement("div");
+				commentVotingControls.className = "comment-voting-controls";
 				commentReply.appendChild(commentVotingControls);
-				
-				commentVotingControls.style.cssFloat = "left";
 				
 				//commentVotingControls = commentControls;
 
@@ -744,8 +774,8 @@ p {
 
 				commentVotingControls.insertBefore(commentVoteDownButton, commentVotingControls.firstChild);
 
-								var commentVoteUpButton = document.createElement("button");
-				
+				var commentVoteUpButton = document.createElement("button");
+
 				commentVoteUpButton.type = "button";
 				commentVoteUpButton.innerHTML = "vote up";
 				commentVoteUpButton.className = "vote-up";
@@ -813,6 +843,7 @@ p {
 				
 				element.select = function()
 				{
+					alert(window.SELECTED);
 					if (window.SELECTED && window.SELECTED == this)
 						return;
 						
@@ -821,11 +852,11 @@ p {
 								
 					window.SELECTED = this;
 		
-					$(this.id+"_reply").style.display = "block";
-					$(this.id+"_reply_padding").style.display = "block";
+					$(this.id+"_reply").className = "comment-reply visible";
+					$(this.id+"_reply_padding").className = "comment-reply-padding visible";
 
-					$(this.id+"_comment").style.backgroundColor = "rgba(255, 255, 155, 0.5)";					
-					
+					$(this.id+"_comment").className += " selected";
+
 					//scrollBy(0, -100);
 				};
 				
@@ -833,8 +864,9 @@ p {
 				{
 					$(this.id+"_comment").style.backgroundColor = "transparent";
 
-					$(this.id+"_reply").style.display = "none";
-					$(this.id+"_reply_padding").style.display = "none";
+					$(this.id+"_reply").className = "comment-reply";
+					$(this.id+"_reply_padding").className = "comment-reply-padding";
+					$(this.id+"_comment").className = $(this.id+"_comment").className.replace(" selected", "");
 
 				   window.SELECTED = null;
 					

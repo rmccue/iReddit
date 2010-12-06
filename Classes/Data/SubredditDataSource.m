@@ -297,7 +297,7 @@
         StoryCell *storyCell = (StoryCell *)cell;
 		storyCell.story = object;
 		
-		CommentAccessoryView *accessory = nil;
+		/*CommentAccessoryView *accessory = nil;
 
 		if (!storyCell.accessoryView)
 		{
@@ -312,7 +312,7 @@
 		[accessory setCommentCount:storyCell.story.totalComments];
 
 		[accessory setTarget:self action:@selector(accessoryViewTapped:)];
-		accessory.story = object;
+		accessory.story = object;*/
 		
         //storyCell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton; 
     }

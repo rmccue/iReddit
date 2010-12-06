@@ -321,7 +321,8 @@
 	[self setScore:story.score];
 }
 
-- (void)drawBackView:(CGRect )rect {
+- (void)drawBackView:(CGRect )rect
+{
 	[[UIImage imageNamed:@"meshpattern.png"] drawAsPatternInRect:rect];
 	[swipebar setNeedsDisplay];
 	NSLog(@"Drawing back view");
@@ -341,17 +342,20 @@
 		[scoreItem setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 }
 
-- (void)pressButton1:(UIBarButtonItem *)button {
+- (void)pressButton1:(UIBarButtonItem *)button
+{
 	NSLog(@"Pressed button 1");
 	NSLog(@"Upvoting story: %@", story.title);
 }
 
-- (void)pressButton2:(UIBarButtonItem *)button {
+- (void)pressButton2:(UIBarButtonItem *)button
+{
 	NSLog(@"Pressed button 2");
 	NSLog(@"Downvoting story: %@", story.title);
 }
 
-- (void)backViewDidDisappear {
+- (void)backViewDidDisappear
+{
 	/*NSEnumerator *subviews = [[backView subviews] objectEnumerator];
 	id view;
 	while (view = [subviews nextObject]) {
@@ -359,7 +363,8 @@
 	}*/
 }
 
-- (void)showBackView {
+- (void)showBackView
+{
 	if (!contentViewMoving && backView.hidden) {
 		
 		contentViewMoving = YES;
@@ -379,7 +384,8 @@
 	NSLog(@"Showing back view for %@", story.title);
 }
 
-- (void)hideBackView {
+- (void)hideBackView
+{
 	NSLog(@"Attempting to hide...");
 	if (!contentViewMoving && !backView.hidden) {
 		//backView.hidden = YES;
@@ -406,8 +412,8 @@
 	}
 }
 
-- (void)resetViews {
-	NSLog(@"Resetting view for %@", story.title);
+- (void)resetViews
+{
 	[self.contentView.layer setAnchorPoint:CGPointMake(0, 0.5)];
 	[self.contentView.layer setPosition:CGPointMake(0, self.contentView.layer.position.y)];
 

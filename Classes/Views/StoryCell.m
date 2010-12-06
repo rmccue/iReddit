@@ -44,19 +44,6 @@
 
 @end
 
-@implementation StoryCellView
-- (void)drawRect:(CGRect)rect {
-	
-	if (!self.hidden){
-		[(StoryCell *)[self superview] drawContentView:rect];
-	}
-	else
-	{
-		[super drawRect:rect];
-	}
-}
-@end
-
 @implementation StoryCellBackView
 - (void)drawRect:(CGRect)rect {
 	if (!self.hidden){

@@ -14,9 +14,6 @@
 @interface TransparentToolbar : UIToolbar
 @end
 
-@interface StoryCellView : UIView
-@end
-
 @interface StoryCellBackView : UIView
 @end
 

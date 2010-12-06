@@ -14,6 +14,7 @@
 #import "StoryCell.h"
 
 @implementation SubredditViewController
+@synthesize indexOfVisibleBackView;
 
 - (void)dealloc 
 {
@@ -113,14 +114,6 @@
 	[super unloadView];
 }*/
 
-- (void)performSwipe:(UISwipeGestureRecognizer*)sender {
-	NSIndexPath *path = [self.tableView indexPathForRowAtPoint:[sender locationInView:self.tableView]];
-	UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:path];
-	if ([cell isKindOfClass:[StoryCell class]]) {
-		[(StoryCell *)cell showBackView];
-	}
-}
-
 - (void)restoreSavedState
 {
 	if (!savedLocation)
@@ -196,6 +189,38 @@
 	return @"No Stories";
 }
 
+#pragma mark Swiping stuff
+
+- (void)performSwipe:(UISwipeGestureRecognizer*)sender {
+	NSIndexPath *path = [self.tableView indexPathForRowAtPoint:[sender locationInView:self.tableView]];
+	UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:path];
+	if ([cell isKindOfClass:[StoryCell class]]) {
+		[self hideVisibleBackView:YES];
+		[self setIndexOfVisibleBackView:path];
+		[(StoryCell *)cell showBackView];
+	}
+}
+
+- (void)hideVisibleBackView:(BOOL)animated {
+	
+	if (indexOfVisibleBackView != nil){
+		
+		if (animated){
+			[(StoryCell *)[self.tableView cellForRowAtIndexPath:indexOfVisibleBackView] hideBackView];
+		}
+		else
+		{
+			[(StoryCell *)[self.tableView cellForRowAtIndexPath:indexOfVisibleBackView] resetViews];
+		}
+		
+		[self setIndexOfVisibleBackView:nil];
+	}
+}
+
+- (void)didBeginDragging {
+	[self hideVisibleBackView:YES];
+}
+
 #pragma mark tab bar stuff
 
 - (void)tabBar:(id)tabBar tabSelected:(int)selectedIndex
@@ -223,10 +248,16 @@
 
 - (void)didSelectObject:(id)object atIndexPath:(NSIndexPath*)indexPath
 {
+	if (indexOfVisibleBackView == indexPath){
+		// Selecting an object that's swiped, do nothing
+		return;
+	}
+
 	[super didSelectObject:object atIndexPath:indexPath];
 
 	if ([object isKindOfClass:[Story class]])
 	{
+		[self hideVisibleBackView:NO];
 		[savedLocation release];
 		savedLocation = [indexPath retain];
 		
@@ -244,6 +275,7 @@
 {
 	if ([object isKindOfClass:[Story class]])
 	{
+		[self hideVisibleBackView:NO];
 		StoryViewController *controller = [[StoryViewController alloc] initForComments];
 		[[self navigationController] pushViewController:controller animated:YES];
 		

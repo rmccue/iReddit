@@ -16,9 +16,14 @@
 	TTTabStrip		*tabBar;
 	
 	NSIndexPath		*savedLocation;
+	NSIndexPath     *indexOfVisibleBackView;
 }
 
+@property (nonatomic, retain) NSIndexPath * indexOfVisibleBackView;
+
 - (id)initWithField:(TTTableTextItem*)anItem;
+- (void)performSwipe:(UISwipeGestureRecognizer *)sender;
+- (void)hideVisibleBackView:(BOOL)animated;
 
 - (void)didSelectAccessoryForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
 

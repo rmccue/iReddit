@@ -106,6 +106,7 @@
 		ADFB556E0FEACC7A0067CEC1 /* NSDictionary+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = ADFB556D0FEACC7A0067CEC1 /* NSDictionary+JSON.m */; };
 		D087533112A8EC1F0031227C /* comments.css in Resources */ = {isa = PBXBuildFile; fileRef = D087533012A8EC1F0031227C /* comments.css */; };
 		D087544412A925400031227C /* comments.js in Resources */ = {isa = PBXBuildFile; fileRef = D087534112A8ED2F0031227C /* comments.js */; };
+		D0D6FB6312A9C85700A9DC2B /* meshpattern.png in Resources */ = {isa = PBXBuildFile; fileRef = D0D6FB6212A9C85700A9DC2B /* meshpattern.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -268,6 +269,7 @@
 		ADFB556D0FEACC7A0067CEC1 /* NSDictionary+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDictionary+JSON.m"; path = "Classes/Extensions/NSDictionary+JSON.m"; sourceTree = SOURCE_ROOT; };
 		D087533012A8EC1F0031227C /* comments.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = comments.css; sourceTree = "<group>"; };
 		D087534112A8ED2F0031227C /* comments.js */ = {isa = PBXFileReference; explicitFileType = sourcecode.javascript; fileEncoding = 4; path = comments.js; sourceTree = "<group>"; };
+		D0D6FB6212A9C85700A9DC2B /* meshpattern.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = meshpattern.png; path = Resources/meshpattern.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -327,6 +329,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D0D6FB6212A9C85700A9DC2B /* meshpattern.png */,
 				ADFB53930FEAC4010067CEC1 /* Resources */,
 				ADEACD8D0FED97C7003CBAE3 /* RedditPremiumIcon.png */,
 				61C35E0F11FF0C85001A2F85 /* RedditPremiumIcon-72.png */,
@@ -695,6 +698,7 @@
 				61C35F1111FF29DB001A2F85 /* voteUp@2x.png in Resources */,
 				61DE6FA211FF399700B1F810 /* Default@2x.png in Resources */,
 				D087533112A8EC1F0031227C /* comments.css in Resources */,
+				D0D6FB6312A9C85700A9DC2B /* meshpattern.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

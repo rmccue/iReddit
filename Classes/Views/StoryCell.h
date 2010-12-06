@@ -23,7 +23,9 @@
 	UILabel		*storyDescriptionView;
 	UILabel		*secondaryDescriptionView;
 	TTImageView	*storyImage;
-	StoryCellBackView  *backView;
+	StoryCellBackView *backView;
+	UIToolbar   *swipebar;
+	NSMutableDictionary *toolbarItems;
 
 	BOOL contentViewMoving;
 }
@@ -32,12 +34,14 @@
 @property (nonatomic,retain) UILabel *storyTitleView;
 @property (nonatomic,retain) UILabel *storyDescriptionView;
 @property (nonatomic,retain) TTImageView *storyImage;
+@property (readonly) UIToolbar *swipebar;
+@property (readonly) NSMutableDictionary *toolbarItems;
 @property (nonatomic,retain) StoryCellBackView *backView;
 @property (nonatomic,assign) BOOL contentViewMoving;
 
+- (void)setScore:(int)score;
 - (void)drawBackView:(CGRect )rect;
 - (void)backViewDidDisappear;
-- (void)drawContentView:(CGRect )rect;
 - (void)showBackView;
 - (void)hideBackView;
 - (void)resetViews;

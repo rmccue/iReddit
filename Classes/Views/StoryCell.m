@@ -8,6 +8,8 @@
 
 #import "StoryCell.h"
 #import "Constants.h"
+#import "LoginController.h"
+#import "LoginViewController.h"
 
 @implementation TransparentToolbar
 
@@ -59,7 +61,7 @@
 
 @implementation StoryCell
 
-@synthesize storyTitleView, storyDescriptionView, storyImage, backView, contentViewMoving;
+@synthesize storyTitleView, storyDescriptionView, storyImage, backView, contentViewMoving, toolbarItems, swipebar;
 @dynamic story;
 
 + (float)tableView:(UITableView *)aTableView rowHeightForItem:(Story *)aStory
@@ -98,12 +100,46 @@
 		StoryCellBackView *anotherView = [[StoryCellBackView alloc] initWithFrame:CGRectZero];
 		[anotherView setOpaque:YES];
 		[anotherView setClipsToBounds:YES];
-		[anotherView setHidden:YES];
 		[anotherView setBackgroundColor:[UIColor blueColor]];
 		[self setBackView:anotherView];
 		[anotherView release];
 		
 		[self addSubview:backView];
+		
+		// Swipe toolbar
+		UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+		toolbarItems = [[NSMutableDictionary alloc] init];
+		[toolbarItems setObject:flexibleSpace forKey:@"spacebefore"];
+		
+		UIBarButtonItem *upbutton = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"voteUp.png"]
+																   style:UIBarButtonItemStylePlain target:self
+																  action:@selector(pressButton1:)] autorelease];
+		[toolbarItems setObject:upbutton forKey:@"voteup"];
+		
+		UIButton *scoreItem = [UIButton buttonWithType:UIButtonTypeCustom];
+		scoreItem.titleLabel.font = [UIFont boldSystemFontOfSize:18.0];
+		scoreItem.showsTouchWhenHighlighted = NO;
+		scoreItem.adjustsImageWhenHighlighted = NO;
+		[scoreItem setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+		[scoreItem setTitleShadowColor:[UIColor blackColor] forState:UIControlStateNormal];
+		
+		scoreItem.titleLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+		
+		[toolbarItems setObject:[[[UIBarButtonItem alloc] initWithCustomView:scoreItem] autorelease] forKey:@"score"];
+		
+		UIBarButtonItem *downbutton = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"voteDown.png"]
+																   style:UIBarButtonItemStylePlain target:self
+																  action:@selector(pressButton2:)] autorelease];
+		[toolbarItems setObject:downbutton forKey:@"votedown"];
+		
+		[toolbarItems setObject:flexibleSpace forKey:@"spaceafter"];
+		[flexibleSpace release];
+		
+		swipebar = [[TransparentToolbar alloc] initWithFrame:CGRectZero];
+		[swipebar setItems:[toolbarItems allValues] animated:NO];
+		[swipebar setOpaque:YES];
+		[swipebar setClipsToBounds:YES];
+		[backView addSubview:swipebar];
 		
 		story = nil;
 
@@ -163,6 +199,7 @@
 	
 	CGRect contentRect = self.contentView.bounds;
 	[backView setFrame:contentRect];
+	[swipebar setFrame:contentRect];
 	CGRect labelRect = contentRect;
 
 	//contentRect.size.width = 320;
@@ -210,11 +247,19 @@
 	if (storyImage)
 		[storyImage release];
 	
+	[backView release];
+	[swipebar release];
+	[toolbarItems release];
     [super dealloc];
 }
 
 - (void)setHighlighted:(BOOL)selected animated:(BOOL)animated
 {
+	if (!backView.hidden)
+	{
+		selected = NO;
+	}
+
 	[super setSelected:selected animated:animated];
 	
 	//UIColor *titleColor = selected ? [UIColor colorWithRed:85.0/255.0 green:26.0/255.0 blue:139.0/255.0 alpha:1.0] : [UIColor blueColor];
@@ -272,47 +317,28 @@
 	
 	[secondaryDescriptionView setText:[NSString stringWithFormat:@"%d points in %@ by %@", story.score, story.subreddit, story.author, story.totalComments, story.totalComments == 1  ? @"" : @"s"]];
 	[secondaryDescriptionView setNeedsDisplay];
+	
+	[self setScore:story.score];
 }
 
 - (void)drawBackView:(CGRect )rect {
 	[[UIImage imageNamed:@"meshpattern.png"] drawAsPatternInRect:rect];
-	UIToolbar *toolbar = [[TransparentToolbar alloc] initWithFrame:rect];
-	
-	NSMutableArray *items = [NSMutableArray array];
-
-	UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-	[items addObject:flexibleSpace];
-	
-	UIBarButtonItem *item1 = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"voteUp.png"]
-															  style:UIBarButtonItemStylePlain target:self
-															 action:@selector(pressButton1:)] autorelease];
-	[items addObject:item1];
-
-	UIButton *scoreItem = [UIButton buttonWithType:UIButtonTypeCustom];
-	scoreItem.titleLabel.font = [UIFont boldSystemFontOfSize:18.0];
-	scoreItem.showsTouchWhenHighlighted = NO;
-	scoreItem.adjustsImageWhenHighlighted = NO;
-	[scoreItem setTitle:[NSString stringWithFormat:@"Score: %i", story.score] forState:UIControlStateNormal];
-	[scoreItem setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-	[scoreItem setTitleShadowColor:[UIColor blackColor] forState:UIControlStateNormal];
-	
-	scoreItem.titleLabel.shadowOffset = CGSizeMake(0.0, -1.0);
-	
-	[items addObject:[[[UIBarButtonItem alloc] initWithCustomView:scoreItem] autorelease]];
-
-	UIBarButtonItem *item2 = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"voteDown.png"]
-															  style:UIBarButtonItemStylePlain target:self
-															 action:@selector(pressButton2:)] autorelease];
-	[items addObject:item2];
-
-	[items addObject:flexibleSpace];
-	[flexibleSpace release];
-
-	[toolbar setItems:items animated:NO];
-	[toolbar setNeedsDisplay];
-	[backView addSubview:toolbar];
-	[toolbar release];
+	[swipebar setNeedsDisplay];
 	NSLog(@"Drawing back view");
+}
+
+- (void)setScore:(int)score
+{
+	UIButton *scoreItem = (UIButton *)[[toolbarItems objectForKey:@"score"] customView];
+	[scoreItem setTitle:[NSString stringWithFormat:@"%i", score] forState:UIControlStateNormal];
+	[scoreItem sizeToFit];
+	
+	if (story.likes)
+		[scoreItem setTitleColor:[UIColor colorWithRed:255.0/255.0 green:139.0/255.0 blue:96.0/255.0 alpha:1.0] forState:UIControlStateNormal];
+	else if (story.dislikes)
+		[scoreItem setTitleColor:[UIColor colorWithRed:148.0/255.0 green:148.0/255.0 blue:255.0/255.0 alpha:1.0] forState:UIControlStateNormal];
+	else
+		[scoreItem setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 }
 
 - (void)pressButton1:(UIBarButtonItem *)button {
@@ -326,15 +352,11 @@
 }
 
 - (void)backViewDidDisappear {
-	NSEnumerator *subviews = [[backView subviews] objectEnumerator];
+	/*NSEnumerator *subviews = [[backView subviews] objectEnumerator];
 	id view;
 	while (view = [subviews nextObject]) {
 		[view removeFromSuperview];
-	}
-}
-
-- (void)drawContentView:(CGRect )rect {
-	NSLog(@"Drawing content view");
+	}*/
 }
 
 - (void)showBackView {
@@ -342,16 +364,15 @@
 		
 		contentViewMoving = YES;
 
-		//[backView.layer setHidden:NO];
-		//[backView setNeedsDisplay];
+		[backView.layer setHidden:NO];
+		[backView setNeedsDisplay];
 		[self.contentView.layer setAnchorPoint:CGPointMake(0, 0.5)];
 		[self.contentView.layer setPosition:CGPointMake(self.contentView.frame.size.width, self.contentView.layer.position.y)];
 		
 		CABasicAnimation * animation = [CABasicAnimation animationWithKeyPath:@"position.x"];
 		[animation setRemovedOnCompletion:NO];
 		[animation setDelegate:self];
-		//[animation setDuration:0.14];
-		[animation setDuration:2];
+		[animation setDuration:0.14];
 		[animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear]];
 		[self.contentView.layer addAnimation:animation forKey:@"reveal"];
 	}
@@ -361,12 +382,11 @@
 - (void)hideBackView {
 	NSLog(@"Attempting to hide...");
 	if (!contentViewMoving && !backView.hidden) {
-		backView.hidden = YES;
+		//backView.hidden = YES;
 		
 		contentViewMoving = YES;
 		
-		//CGFloat hideDuration = 0.09;
-		CGFloat hideDuration = 1;
+		CGFloat hideDuration = 0.09;
 		
 		[backView.layer setOpacity:0.0];
 		CABasicAnimation *hideAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
@@ -382,7 +402,7 @@
 		[self.contentView.layer setPosition:CGPointMake(0, self.contentView.layer.position.y)];
 		[self.contentView.layer addAnimation:[self bounceAnimationWithHideDuration:hideDuration initialXOrigin:originalX] 
 								 forKey:@"bounce"];
-		NSLog(@"Hiding");
+		NSLog(@"will disappear");
 	}
 }
 
@@ -395,8 +415,69 @@
 	[backView.layer setOpacity:1.0];
 	
 	[self backViewDidDisappear];
-
+	NSLog(@"did disappear");
 	contentViewMoving = NO;
+}
+
+
+- (void)voteUp:(id)sender
+{
+	if (![[LoginController sharedLoginController] isLoggedIn] && sender != self)
+	{
+		[LoginViewController presentWithDelegate:(id <LoginViewControllerDelegate>)self context:@"voteUp"];
+		return;
+	}
+	
+	NSString *url = [NSString stringWithFormat:@"%@%@", RedditBaseURLString, RedditVoteAPIString];
+	TTURLRequest *request = [TTURLRequest requestWithURL:url delegate:nil];
+	
+	request.cacheExpirationAge = 0;
+	request.cachePolicy = TTURLRequestCachePolicyNoCache;
+	request.contentType = @"application/x-www-form-urlencoded";
+	request.httpMethod = @"POST";
+	request.httpBody = [[NSString stringWithFormat:@"dir=%d&uh=%@&id=%@&_=", story.likes ? 0 : 1, 
+						 [[LoginController sharedLoginController] modhash], story.name] 
+						dataUsingEncoding:NSASCIIStringEncoding];
+	
+	[request send];
+	
+	
+	story.likes = !story.likes;
+	story.dislikes = NO;
+	
+	[self setScore:story.score];
+	
+	//[[Beacon shared] startSubBeaconWithName:@"votedUp" timeSession:NO];
+}
+
+- (void)voteDown:(id)sender
+{
+	if (![[LoginController sharedLoginController] isLoggedIn] && sender != self)
+	{
+		[LoginViewController presentWithDelegate:(id <LoginViewControllerDelegate>)self context:@"voteDown"];
+		return;
+	}
+	
+	NSString *url = [NSString stringWithFormat:@"%@%@", RedditBaseURLString, RedditVoteAPIString];
+	TTURLRequest *request = [TTURLRequest requestWithURL:url delegate:nil];
+	
+	request.cacheExpirationAge = 0;
+	request.cachePolicy = TTURLRequestCachePolicyNoCache;
+	request.contentType = @"application/x-www-form-urlencoded";
+	request.httpMethod = @"POST";
+	request.httpBody = [[NSString stringWithFormat:@"dir=%d&uh=%@&id=%@&_=", story.dislikes ? 0 : -1, 
+						 [[LoginController sharedLoginController] modhash], story.name] 
+						dataUsingEncoding:NSASCIIStringEncoding];
+	
+	[request send];
+	
+	
+	story.likes = NO;
+	story.dislikes = !story.dislikes;
+	
+	[self setScore:story.score];
+	 
+	 //[[Beacon shared] startSubBeaconWithName:@"votedDown" timeSession:NO];
 }
 
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
@@ -405,18 +486,17 @@
 		
 		if (anim == [self.contentView.layer animationForKey:@"reveal"]){
 			[self.contentView.layer removeAnimationForKey:@"reveal"];
-			NSLog(@"reveal");
+			NSLog(@"did appear");
 			contentViewMoving = NO;
 		}
 		
 		if (anim == [self.contentView.layer animationForKey:@"bounce"]){
-			NSLog(@"bounce");
+			
 			[self.contentView.layer removeAnimationForKey:@"bounce"];
 			[self resetViews];
 		}
 		
 		if (anim == [backView.layer animationForKey:@"hide"]){
-			NSLog(@"hide");
 			[backView.layer removeAnimationForKey:@"hide"];
 		}
 	}

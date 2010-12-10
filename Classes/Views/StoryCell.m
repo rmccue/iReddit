@@ -314,6 +314,8 @@
 	[self setScore:story.score];
 }
 
+#pragma mark Swipe bar
+
 - (void)drawBackView:(CGRect )rect
 {
 	[[UIImage imageNamed:@"meshpattern.png"] drawAsPatternInRect:rect];

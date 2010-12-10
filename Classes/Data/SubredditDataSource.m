@@ -296,6 +296,7 @@
 	{ 
         StoryCell *storyCell = (StoryCell *)cell;
 		storyCell.story = object;
+		[storyCell resetViews];
 		
 		/*CommentAccessoryView *accessory = nil;
 

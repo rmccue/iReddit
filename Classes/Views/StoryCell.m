@@ -408,9 +408,11 @@
 {
 	[self.contentView.layer setAnchorPoint:CGPointMake(0, 0.5)];
 	[self.contentView.layer setPosition:CGPointMake(0, self.contentView.layer.position.y)];
+	[self.contentView.layer removeAllAnimations];
 
 	[backView.layer setHidden:YES];
 	[backView.layer setOpacity:1.0];
+	[backView.layer removeAllAnimations];
 	
 	[self backViewDidDisappear];
 	NSLog(@"did disappear");

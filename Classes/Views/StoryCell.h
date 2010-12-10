@@ -25,7 +25,7 @@
 	TTImageView	*storyImage;
 	StoryCellBackView *backView;
 	UIToolbar   *swipebar;
-	NSMutableDictionary *toolbarItems;
+	UILabel     *scoreItem;
 
 	BOOL contentViewMoving;
 }
@@ -35,7 +35,7 @@
 @property (nonatomic,retain) UILabel *storyDescriptionView;
 @property (nonatomic,retain) TTImageView *storyImage;
 @property (readonly) UIToolbar *swipebar;
-@property (readonly) NSMutableDictionary *toolbarItems;
+@property (nonatomic,retain) UILabel *scoreItem;
 @property (nonatomic,retain) StoryCellBackView *backView;
 @property (nonatomic,assign) BOOL contentViewMoving;
 

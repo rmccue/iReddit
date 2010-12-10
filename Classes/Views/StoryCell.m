@@ -61,7 +61,7 @@
 
 @implementation StoryCell
 
-@synthesize storyTitleView, storyDescriptionView, storyImage, backView, contentViewMoving, toolbarItems, swipebar;
+@synthesize storyTitleView, storyDescriptionView, storyImage, backView, contentViewMoving, scoreItem, swipebar;
 @dynamic story;
 
 + (float)tableView:(UITableView *)aTableView rowHeightForItem:(Story *)aStory
@@ -107,36 +107,29 @@
 		[self addSubview:backView];
 		
 		// Swipe toolbar
-		UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-		toolbarItems = [[NSMutableDictionary alloc] init];
-		[toolbarItems setObject:flexibleSpace forKey:@"spacebefore"];
-		
-		UIBarButtonItem *upbutton = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"voteUp.png"]
+		UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];		
+		UIBarButtonItem *upbutton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"voteUp.png"]
 																   style:UIBarButtonItemStylePlain target:self
-																  action:@selector(pressButton1:)] autorelease];
-		[toolbarItems setObject:upbutton forKey:@"voteup"];
+																  action:@selector(pressButton1:)];
+		scoreItem = [[UILabel alloc] init];
+		scoreItem.font = [UIFont boldSystemFontOfSize:18.0];
+		[scoreItem setTextColor:[UIColor whiteColor]];
+		[scoreItem setShadowColor:[UIColor blackColor]];
+		[scoreItem setBackgroundColor:[UIColor clearColor]];
 		
-		UIButton *scoreItem = [UIButton buttonWithType:UIButtonTypeCustom];
-		scoreItem.titleLabel.font = [UIFont boldSystemFontOfSize:18.0];
-		scoreItem.showsTouchWhenHighlighted = NO;
-		scoreItem.adjustsImageWhenHighlighted = NO;
-		[scoreItem setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-		[scoreItem setTitleShadowColor:[UIColor blackColor] forState:UIControlStateNormal];
+		scoreItem.shadowOffset = CGSizeMake(0.0, -1.0);
 		
-		scoreItem.titleLabel.shadowOffset = CGSizeMake(0.0, -1.0);
-		
-		[toolbarItems setObject:[[[UIBarButtonItem alloc] initWithCustomView:scoreItem] autorelease] forKey:@"score"];
-		
-		UIBarButtonItem *downbutton = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"voteDown.png"]
+		UIBarButtonItem *downbutton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"voteDown.png"]
 																   style:UIBarButtonItemStylePlain target:self
-																  action:@selector(pressButton2:)] autorelease];
-		[toolbarItems setObject:downbutton forKey:@"votedown"];
-		
-		[toolbarItems setObject:flexibleSpace forKey:@"spaceafter"];
-		[flexibleSpace release];
+																  action:@selector(pressButton2:)];
 		
 		swipebar = [[TransparentToolbar alloc] initWithFrame:CGRectZero];
-		[swipebar setItems:[toolbarItems allValues] animated:NO];
+		NSArray *items = [NSArray arrayWithObjects:flexibleSpace, upbutton, [[[UIBarButtonItem alloc] initWithCustomView:scoreItem] autorelease], downbutton, flexibleSpace, nil];
+		[flexibleSpace release];
+		[upbutton release];
+		[downbutton release];
+		
+		[swipebar setItems:items animated:NO];
 		[swipebar setOpaque:YES];
 		[swipebar setClipsToBounds:YES];
 		[backView addSubview:swipebar];
@@ -249,7 +242,7 @@
 	
 	[backView release];
 	[swipebar release];
-	[toolbarItems release];
+	[scoreItem release];
     [super dealloc];
 }
 
@@ -330,16 +323,15 @@
 
 - (void)setScore:(int)score
 {
-	UIButton *scoreItem = (UIButton *)[[toolbarItems objectForKey:@"score"] customView];
-	[scoreItem setTitle:[NSString stringWithFormat:@"%i", score] forState:UIControlStateNormal];
+	[scoreItem setText:[NSString stringWithFormat:@"%i", score]];
 	[scoreItem sizeToFit];
 	
 	if (story.likes)
-		[scoreItem setTitleColor:[UIColor colorWithRed:255.0/255.0 green:139.0/255.0 blue:96.0/255.0 alpha:1.0] forState:UIControlStateNormal];
+		[scoreItem setTextColor:[UIColor colorWithRed:255.0/255.0 green:139.0/255.0 blue:96.0/255.0 alpha:1.0]];
 	else if (story.dislikes)
-		[scoreItem setTitleColor:[UIColor colorWithRed:148.0/255.0 green:148.0/255.0 blue:255.0/255.0 alpha:1.0] forState:UIControlStateNormal];
+		[scoreItem setTextColor:[UIColor colorWithRed:148.0/255.0 green:148.0/255.0 blue:255.0/255.0 alpha:1.0]];
 	else
-		[scoreItem setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+		[scoreItem setTextColor:[UIColor whiteColor]];
 }
 
 - (void)pressButton1:(UIBarButtonItem *)button
